@@ -12,14 +12,14 @@
 | Membre du CA | **Conseil d'administration** (sous-groupe d'Associés) | Accès conseil | tout ce qui précède + rubriques réservées au CA |
 | Administrateur du site | Super Users | — | tout |
 
-Mécanisme Joomla : un membre d'un sous-groupe appartient implicitement à ses groupes parents — un membre du CA voit donc tout ce qui est accessible aux associés, sans doublon de réglage.
+Mécanisme Joomla : un membre d'un sous-groupe appartient implicitement à tous ses groupes parents (jamais l'inverse : le membre d'un groupe parent n'appartient pas à ses sous-groupes). Les niveaux d'accès suivent ce sens : un niveau qui liste « Invités KTC » est visible par les invités **et par tous leurs descendants**. D'où l'arborescence **Invités KTC → Associés → Conseil d'administration** : les associés descendent des invités (ils voient tout ce que voient les invités), le CA descend des associés — sans doublon de réglage.
 
 ## 1. Groupes d'utilisateurs
 
 **Utilisateurs → Groupes d'utilisateurs → Ajouter** (trois créations) :
 
 1. **Invités KTC** — parent : *Enregistré* — description : « Invités non associés, compte temporaire créé par un associé » ;
-2. **Associés** — parent : *Enregistré* ;
+2. **Associés** — parent : **Invités KTC** (ainsi les associés héritent de l'accès invités : ils voient tout ce que voient les invités) ;
 3. **Conseil d'administration** — parent : *Associés*.
 
 ## 2. Niveaux d'accès
