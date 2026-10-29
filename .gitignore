@@ -1,0 +1,6 @@
+# KTC — secrets et fichiers générés (jamais dans le dépôt)
+/configuration.php
+/administrator/cache/
+/cache/
+/logs/
+/tmp/
