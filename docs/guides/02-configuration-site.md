@@ -47,20 +47,41 @@ Mécanisme Joomla : un membre d'un sous-groupe appartient implicitement à tous 
 | Travaux | Accès associés | (à plat : une fiche-article par chantier) |
 | Vie familiale | Accès associés | Photos · Souvenirs · Événements |
 
-## 5. Champs personnalisés
+## 5. Champs personnalisés (le mécanisme pas à pas)
 
-**Contenu → Groupes de champs** : créer le groupe **« Fiche chantier »**, affecté à la catégorie *Travaux*.
-**Contenu → Champs** (chaque champ : onglet Publication → *Afficher sur le site* = « Après le contenu ») :
+**Les trois concepts, une ligne chacun** :
+- un **champ** = une information supplémentaire à remplir sur un article (ex. « Statut du chantier ») ;
+- un **groupe de champs** = un rangement qui devient un **onglet** dans le formulaire de l'article (sans groupe, les champs s'empilent dans un onglet générique « Champs ») ;
+- l'**affectation aux catégories** se règle **sur chaque champ** — jamais sur le groupe, jamais depuis la fiche de la catégorie.
 
-| Champ | Type | Réglages |
-|---|---|---|
-| Statut du chantier | Liste | À l'étude · À programmer · En cours · Terminé |
-| Date de décision | Calendrier | — |
-| Budget estimé | Texte | — |
-| Coût constaté | Texte | masqué tant que vide |
-| Avancement | Entier | « % » dans le libellé : « Avancement (%) » |
+On ne crée donc **rien sur les articles ni sur les catégories** : chaque champ est créé **une seule fois**, dans *Contenu → Champs*, avec (a) son groupe et (b) sa catégorie. Tous les articles de cette catégorie — sous-catégories comprises — affichent ensuite automatiquement l'onglet et ses champs. D'où l'ordre : catégories d'abord (§4), champs ensuite (ici), articles en dernier (§7, ils n'ont rien à faire).
 
-Toujours dans **Contenu → Groupes de champs** : créer le groupe **« Document officiel »** affecté à la catégorie *La SCI* → un champ type **Document** (natif Joomla 6) nommé « Pièce jointe officielle » : il s'affichera comme lien de téléchargement propre en tête de fiche (statuts PDF, CR d'AG).
+### 5a. Les groupes (deux créations, rien d'autre à régler)
+
+**Contenu → Groupes de champs → Nouveau** — *Titre* : **« Fiche chantier »** → Enregistrer & fermer. Répéter avec **« Document officiel »**. Le groupe est un pur conteneur : aucun réglage de catégorie à ce stade (c'est sur les champs, en 5b, que tout se joue).
+
+### 5b. Les champs (six créations)
+
+**Contenu → Champs → Nouveau** — vérifier en haut de page que le sélecteur de contexte indique bien **Articles**. Dans chaque fiche de champ :
+
+1. **onglet Général** : *Titre* et *Type* (tableau ci-dessous), puis les deux réglages qui font tout le mécanisme :
+   - **Groupe de champs** : *Fiche chantier* ou *Document officiel* → l'onglet où vivra le champ ;
+   - **Catégorie(s) affectée(s)** : *Travaux* ou *La SCI* → les seuls articles qui verront ce champ (« Tous » = partout, sauf articles non catégorisés) ;
+2. selon le type : valeurs de la liste (une par ligne) ou libellé ;
+3. **onglet Options** : *Affichage automatique* = **Après le contenu** — pour la pièce jointe officielle, préférer **Après le titre** (lien de téléchargement en tête de fiche).
+
+| Champ | Type | Groupe | Catégorie | Détails |
+|---|---|---|---|---|
+| Statut du chantier | Liste | Fiche chantier | Travaux | valeurs : À l'étude · À programmer · En cours · Terminé |
+| Date de décision | Calendrier | Fiche chantier | Travaux | — |
+| Budget estimé | Texte | Fiche chantier | Travaux | — |
+| Coût constaté | Texte | Fiche chantier | Travaux | vide = non affiché (comportement par défaut) |
+| Avancement | Entier | Fiche chantier | Travaux | libellé : « Avancement (%) » |
+| Pièce jointe officielle | Document | Document officiel | La SCI | natif Joomla 6 ; statuts PDF, CR d'AG |
+
+### 5c. Vérification immédiate (avant le §7)
+
+Créer un article jetable : dès que vous choisissez la **catégorie Travaux**, l'onglet **« Fiche chantier »** apparaît dans le formulaire avec ses 5 champs ; changez la catégorie pour *Vie familiale* : l'onglet disparaît. (L'onglet n'apparaît qu'après sélection de la catégorie — c'est normal.) Supprimer l'article de test.
 
 ## 6. Menus et modules
 
