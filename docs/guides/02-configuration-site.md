@@ -114,7 +114,34 @@ Tester chaque compte **dans une fenêtre privée du navigateur** : un invité ne
 
 Le rôle « Invités KTC » existe (§1), mais Joomla n'a pas **d'expiration native** des comptes. En M01, la temporaryté est gérée à la main : à la fin d'un séjour, l'associé référent demande au CA de **désactiver** le compte (Utilisateurs → fiche → bloqué). L'automatisation (création par l'associé + expiration automatique) est notée comme chantier d'extension pour un jalon futur.
 
-## 10. Sauvegardes
+## 10. Contributions des associés
+
+**Objectif** : les associés peuvent proposer des articles (souvenirs, photos, suites de séjours…), sans les publier eux-mêmes — le CA relit et publie. Les groupes prédéfinis *Author / Editor / Publisher* restent **vides** : on réutilise leur sémantique (Associés = type Auteur, CA = type Publisher), mais les comptes restent dans les 3 groupes KTC (§1) et ce sont les **permissions** qui portent les droits.
+
+### Accès à l'administration
+
+En M01, les rédacteurs passent par l'administration Joomla :
+
+1. **Système → Configuration globale → onglet Permissions** → groupe **Associés** → *Connexion à l'administration* = **Autorisé**. L'associé ne verra ensuite que ce que les permissions lui ouvrent (ici : écrire dans Vie familiale, rien d'autre).
+
+### Permissions « type Auteur » — uniquement sur Vie familiale
+
+1. **Système → Configuration globale → onglet Permissions** → groupe **Conseil d'administration** → réglages d'*Articles* : *Créer*, *Modifier*, *Modifier l'état* = **Autorisé** (rôle type Publisher : le CA peut publier partout).
+2. Pour les **Associés**, on n'accorde **rien** globalement (*Hérité* = refusé). On n'ouvre que la rubrique des contributions : **Contenu → Catégories** → ouvrir **Vie familiale** → onglet **Permissions** → groupe **Associés** → réglages d'*Articles* : *Créer* = **Autorisé** et *Modifier les siens* = **Autorisé** ; *Modifier l'état* laissé sur *Hérité* (pas d'auto-publication). Les sous-catégories (Photos, Souvenirs, Événements) héritent de ce réglage : un associé peut créer et reprendre ses brouillons dans Vie familiale — et rien d'autre.
+
+### Workflow de publication (modération par le CA)
+
+1. **Contenu → Articles → Options → onglet Intégration** : *Activer les workflows* = **Oui** (si rien ne réagit, vérifier dans **Système → Plugins** que les plugins du groupe *Workflow* sont activés).
+2. **Contenu → Workflows** : le workflow par défaut enchaîne déjà « brouillon → relecture → publié » (éditeur visuel de workflow depuis Joomla 6.1). Ouvrir la transition qui mène à l'état **Publié** et ne laisser en groupes autorisés que **Conseil d'administration** + Super Users ; les transitions « enregistrer en brouillon » et « soumettre en relecture » restent accessibles aux Associés.
+
+### Test (avec les comptes du §8)
+
+1. Connecté comme **Camille Associé** (fenêtre privée) : créer un article dans Vie familiale → il s'enregistre **non publié**, sans bouton de publication ;
+2. Connecté comme **Claude CA** : retrouver l'article → transition → **Publié** → il apparaît sur le site.
+
+*Note M01* : l'édition directement depuis le site public (sans passer par l'administration) sera évaluée plus tard (M02+) ; M01 valide d'abord le mécanisme de modération.
+
+## 11. Sauvegardes
 
 La base ne vit pas dans git : après chaque séance de configuration lourde, exporter la base (espace client OVH → Bases de données → phpMyAdmin → Exporter, format SQL, gzip) et conserver l'export localement. Rythme visé : une sauvegarde par séance de travail au début, puis mensuelle.
 
