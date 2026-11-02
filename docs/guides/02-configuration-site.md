@@ -155,10 +155,25 @@ En M01, les rédacteurs passent par l'administration Joomla :
 1. **Contenu → Articles → Options → onglet Intégration** : *Activer les workflows* = **Oui** (si rien ne réagit, vérifier dans **Système → Plugins** que les plugins du groupe *Workflow* sont activés).
 2. **Contenu → Workflows** : le workflow par défaut enchaîne déjà « brouillon → relecture → publié » (éditeur visuel de workflow depuis Joomla 6.1). Ouvrir la transition qui mène à l'état **Publié** et ne laisser en groupes autorisés que **Conseil d'administration** + Super Users ; les transitions « enregistrer en brouillon » et « soumettre en relecture » restent accessibles aux Associés.
 
+### Photos et documents (droits médias des rédacteurs)
+
+1. **Contenu → Médias → bouton Options → section Droits** : groupe **Associés** → *Accès à l'interface d'administration* = **Autorisé** et *Create* = **Autorisé** ; laisser *Delete* et *Edit* sur **Hérité** (refusés) : les associés peuvent téléverser, ni supprimer ni déplacer les fichiers.
+2. Créer le dossier **images/contributions** (bouton *Nouveau dossier* du gestionnaire de médias) : demander aux associés d'y téléverser. Ils voient l'arborescence complète mais sans droit de suppression.
+3. Vérifier que *pdf* figure dans les **extensions documents autorisées** (dans ces mêmes options — c'est la valeur par défaut).
+4. **Chemin d'insertion pour tous les rédacteurs : « Contenu CMS » → « Médias »** dans la barre d'outils de l'éditeur — images insérées dans l'article, PDF insérés en lien de téléchargement. Le menu natif « Insérer » de TinyMCE n'existe que dans l'ensemble d'outils complet, réservé aux administrateurs : inutile de l'ajouter aux associés.
+5. ⚠️ Ne jamais accorder de permissions **globales** (Configuration globale → Permissions) pour « débloquer » un bouton média : l'héritage ACL ouvrirait aux Associés la création d'articles dans toutes les catégories.
+
+### Versions d'articles (audit des modifications — décision D17)
+
+- **Contenu → Articles → bouton Options → onglet Agencement** : *Activer les versions* = **Oui** (réglage par défaut sur installation neuve) ; *Versions maximum* = 10.
+- Politique retenue : l'auteur **peut modifier son article publié** (aucune re-modération native dans Joomla) ; le filet de sécurité est l'historique des versions : bouton **Versions** de l'article → comparer deux versions, **Restaurer**, **Conserver indéfiniment** une version clé.
+- Limites : versionnement non rétroactif ; les champs personnalisés (fiche chantier) ne sont pas versionnés.
+
 ### Test (avec les comptes du §8)
 
 1. Connecté comme **Camille Associé** (fenêtre privée) : créer un article dans Vie familiale → il s'enregistre **non publié**, sans bouton de publication ;
-2. Connecté comme **Claude CA** : retrouver l'article → transition → **Publié** → il apparaît sur le site.
+2. dans le même article : **Contenu CMS → Médias** → téléverser une photo dans images/contributions → l'insérer dans l'article, puis insérer un PDF en lien de téléchargement ;
+3. connecté comme **Claude CA** : retrouver l'article → transition → **Publié** → il apparaît sur le site, image comprise.
 
 *Note M01* : l'édition directement depuis le site public (sans passer par l'administration) sera évaluée plus tard (M02+) ; M01 valide d'abord le mécanisme de modération.
 
