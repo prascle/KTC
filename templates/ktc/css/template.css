@@ -40,6 +40,14 @@
   --border-radius: .375rem;
 }
 
+/* En-tête — bleu agapanthe garanti : Cassiopeia peint l'en-tête (.container-header)
+   avec un dégradé (background-image) posé PAR-DESSUS la couleur de fond ;
+   on fixe les deux explicitement, du bleu agapanthe vers sa variante foncée. */
+.container-header {
+  background-color: var(--ktc-bleu);
+  background-image: linear-gradient(135deg, var(--ktc-bleu) 0%, var(--ktc-bleu-fonce) 100%);
+}
+
 /* --------------------------------------------------------------------------
    2. Boutons — pleins, coins arrondis, granit rose (décision D22)
    -------------------------------------------------------------------------- */
@@ -108,15 +116,36 @@
 
 /* --------------------------------------------------------------------------
    5. Pied de page — teinte bleu agapanthe claire
+   Cassiopeia peint le pied de page (.footer) avec un dégradé posé en
+   background-image PAR-DESSUS la couleur de fond : il faut l'annuler
+   explicitement, et rendre le texte sombre (Cassiopeia le met en blanc).
    -------------------------------------------------------------------------- */
-.container-footer {
+.container-footer.footer {
   margin-top: 2rem;
   background-color: var(--ktc-bleu-clair);
+  background-image: none;
+  color: var(--ktc-bleu-fonce);
   border-top: 1px solid #dbe1f0;
 }
 
 .container-footer .grid-child {
   padding: 1.25rem .5rem;
+}
+
+.container-footer.footer a:not(.btn),
+.container-footer.footer .btn-link {
+  color: var(--ktc-bleu-fonce);
+}
+
+.container-footer.footer a:not(.btn):hover,
+.container-footer.footer a:not(.btn):focus,
+.container-footer.footer .btn-link:hover,
+.container-footer.footer .btn-link:focus {
+  color: var(--ktc-rose-fonce);
+}
+
+.container-footer.footer .metismenu.mod-menu .mm-collapse {
+  background: var(--ktc-bleu-clair);
 }
 
 /* --------------------------------------------------------------------------
