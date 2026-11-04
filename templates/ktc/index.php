@@ -101,8 +101,9 @@ $wa->usePreset('template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'l
 		$fontStyles
 	}");
 
-// KTC : feuille de style du template enfant (palette P3, boutons, badges, encadrés)
-$wa->registerAndUseStyle('template.ktc.custom', $this->baseurl . '/templates/ktc/css/template.css', ['version' => 'auto']);
+// KTC : feuille de style du template enfant (palette P3, boutons, badges, encadrés) —
+// chargée via l'API document (chemin déterministe, rendue après les assets du template).
+$this->addStyleSheet(Uri::root(true) . '/templates/ktc/css/template.css', ['version' => 'auto']);
 
 // Override 'template.active' asset to set correct ltr/rtl dependency
 $wa->registerStyle('template.active', '', [], [], ['template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'ltr')]);
