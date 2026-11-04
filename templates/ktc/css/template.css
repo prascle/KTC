@@ -1,0 +1,138 @@
+@charset "UTF-8";
+/* ==========================================================================
+   KTC — template enfant de Cassiopeia
+   Livraison 1 (socle) : palette P3, boutons, badges, encadré, pied de page.
+
+   Palette P3 (arbitrage M02 du 04/11) :
+   - bleu agapanthe  : structure, liens, en-tête, badges «À savoir» ;
+   - granit rose     : boutons et actions.
+   Cette feuille est chargée en dernier (après template.css, theme.colors_standard
+   et le style en ligne du index.php) : les valeurs ci-dessous priment.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Palette P3 et pilotage du thème Cassiopeia
+   -------------------------------------------------------------------------- */
+:root {
+  /* Palette KTC */
+  --ktc-bleu: #46609c;         /* bleu agapanthe — structure, liens, en-tête */
+  --ktc-bleu-fonce: #33477c;   /* variante foncée — survol, dégradé d'en-tête */
+  --ktc-bleu-clair: #eaeef9;   /* teinte claire — fonds, encadrés, pied de page */
+  --ktc-rose: #b06a5f;         /* granit rose — boutons, actions, accents */
+  --ktc-rose-fonce: #96564b;   /* granit rose foncé — survol des boutons */
+  --ktc-rose-clair: #f7eae6;   /* teinte claire du granit rose */
+  --ktc-etude: #5d6b78;        /* badge « à l'étude » — gris */
+  --ktc-encours: #c77d2b;      /* badge « en cours » — ambre */
+  --ktc-termine: #3f7d4e;      /* badge « terminé » — vert */
+
+  /* Pilotage de Cassiopeia */
+  --hue: 222;                                   /* déclinaisons du bleu agapanthe */
+  --cassiopeia-color-primary: var(--ktc-bleu);       /* en-tête, boutons */
+  --cassiopeia-color-hover: var(--ktc-bleu-fonce);  /* dégradé de l'en-tête */
+  --cassiopeia-color-link: var(--ktc-bleu);
+  --link-color: var(--ktc-bleu);
+  --link-color-rgb: 70, 96, 156;
+  --link-hover-color: var(--ktc-bleu-fonce);
+  --link-hover-color-rgb: 51, 71, 124;
+  --template-special-color: var(--ktc-bleu-fonce);
+
+  /* Coins légèrement arrondis (champs, menus déroulants, cartes) */
+  --border-radius: .375rem;
+}
+
+/* --------------------------------------------------------------------------
+   2. Boutons — pleins, coins arrondis, granit rose (décision D22)
+   -------------------------------------------------------------------------- */
+.btn {
+  border-radius: .65rem;
+}
+
+.btn-primary {
+  --btn-bg: var(--ktc-rose);
+  --btn-border-color: var(--ktc-rose);
+  --btn-hover-bg: var(--ktc-rose-fonce);
+  --btn-hover-border-color: var(--ktc-rose-fonce);
+  --btn-active-bg: var(--ktc-rose-fonce);
+  --btn-active-border-color: var(--ktc-rose-fonce);
+  --btn-focus-shadow-rgb: 176, 106, 95;
+  background-color: var(--ktc-rose);
+  border-color: var(--ktc-rose);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--ktc-rose-fonce);
+  border-color: var(--ktc-rose-fonce);
+}
+
+/* --------------------------------------------------------------------------
+   3. Badges de statut (arbitrage B) + étiquette « Nouveau »
+   À utiliser dans les articles/fiches : <span class="badge badge-ktc-etude">…
+   -------------------------------------------------------------------------- */
+.badge-ktc-etude {
+  background-color: var(--ktc-etude);
+}
+
+.badge-ktc-encours {
+  background-color: var(--ktc-encours);
+}
+
+.badge-ktc-termine {
+  background-color: var(--ktc-termine);
+}
+
+.badge-ktc-nouveau {
+  background-color: var(--ktc-rose);
+}
+
+/* --------------------------------------------------------------------------
+   4. Encadré « À savoir » (règles, conseils — décision D22)
+   <div class="ktc-astuce"><p>…</p></div>
+   -------------------------------------------------------------------------- */
+.ktc-astuce {
+  background-color: var(--ktc-bleu-clair);
+  border: 0;
+  border-inline-start: .3rem solid var(--ktc-bleu);
+  border-radius: .5rem;
+  padding: 1rem 1.25rem;
+  margin-block: 1.5rem;
+}
+
+.ktc-astuce > :first-child {
+  margin-top: 0;
+}
+
+.ktc-astuce > :last-child {
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   5. Pied de page — teinte bleu agapanthe claire
+   -------------------------------------------------------------------------- */
+.container-footer {
+  margin-top: 2rem;
+  background-color: var(--ktc-bleu-clair);
+  border-top: 1px solid #dbe1f0;
+}
+
+.container-footer .grid-child {
+  padding: 1.25rem .5rem;
+}
+
+/* --------------------------------------------------------------------------
+   6. Détails soignés — animations sobres, pas de clignotement (D23)
+   -------------------------------------------------------------------------- */
+.card {
+  transition: box-shadow .25s ease;
+}
+
+.card:hover {
+  box-shadow: 0 .35rem 1rem #0000001f;
+}
+
+/* Défilement fluide pour les ancres (sommaires des articles longs) */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

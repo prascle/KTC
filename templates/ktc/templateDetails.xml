@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="template" client="site">
+	<name>ktc</name>
+	<version>1.0.0</version>
+	<creationDate>2026-11</creationDate>
+	<author>Paul RASCLE</author>
+	<copyright>(C) 2026 Paul RASCLE</copyright>
+	<description>Template enfant KTC — site de la maison de famille Ker Tad-Coz (basé sur Cassiopeia).</description>
+	<inheritable>0</inheritable>
+	<parent>cassiopeia</parent>
+	<files>
+		<filename>index.php</filename>
+		<filename>templateDetails.xml</filename>
+		<folder>css</folder>
+	</files>
+</extension>
