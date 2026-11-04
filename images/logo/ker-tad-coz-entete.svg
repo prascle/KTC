@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 170" width="260" height="130" role="img" aria-label="Ker Tad-Coz">
+  <path d="M 26,6 H 314 A 20 20 0 0 0 334,26 V 144 A 20 20 0 0 0 314,164 H 26 A 20 20 0 0 0 6,144 V 26 A 20 20 0 0 0 26,6 Z"
+        fill="#3d558e" stroke="#2c3f6e" stroke-width="2"/>
+  <path d="M 31,18 H 309 A 13 13 0 0 0 322,31 V 139 A 13 13 0 0 0 309,152 H 31 A 13 13 0 0 0 18,139 V 31 A 13 13 0 0 0 31,18 Z"
+        fill="none" stroke="#8ea0cd" stroke-width="1.5" opacity="0.55"/>
+  <path d="M 31,19.5 H 309 A 13 13 0 0 0 322,32.5 V 139 A 13 13 0 0 0 309,151.5 H 31 A 13 13 0 0 0 18,139 V 32.5 A 13 13 0 0 0 31,19.5 Z"
+        fill="none" stroke="#1b2947" stroke-width="1.2" opacity="0.5"/>
+  <text x="170" y="79.8" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="38" letter-spacing="5" fill="#141f38" opacity="0.5" transform="translate(0 1.8)">KER</text>
+  <text x="170" y="79.8" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="38" letter-spacing="5" fill="#f4f6fb">KER</text>
+  <text x="170" y="129.8" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="30" letter-spacing="3.5" fill="#141f38" opacity="0.5" transform="translate(0 1.8)">TAD-COZ</text>
+  <text x="170" y="129.8" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="30" letter-spacing="3.5" fill="#f4f6fb">TAD-COZ</text>
+</svg>
