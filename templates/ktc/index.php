@@ -10,10 +10,11 @@
 
 /*
  * Template enfant « ktc » — dérivé de templates/cassiopeia/index.php (Joomla 6.2).
- * Trois écarts seulement par rapport au parent :
+ * Quatre écarts seulement par rapport au parent :
  *   1. chargement de la feuille de style enfant (palette P3, composants KTC) ;
  *   2. barre de navigation permanente (sticky) forcée ;
- *   3. présent (voir css/template.css pour le reste).
+ *   3. menu mobile « burger » avec panneau à grandes entrées (arbitrage M1) ;
+ *   4. présent (voir css/template.css pour le reste).
  * À chaque mise à jour du cœur Joomla (via PR, décision D16), vérifier si
  * templates/cassiopeia/index.php évolue et reporter les changements ici.
  */
@@ -105,6 +106,20 @@ $wa->usePreset('template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'l
 // chargée via l'API document (chemin déterministe, rendue après les assets du template).
 $this->addStyleSheet(Uri::root(true) . '/templates/ktc/css/template.css', ['version' => 'auto']);
 
+// KTC : bascule du menu mobile (burger — arbitrage M1, bouton visible < 992 px).
+$wa->addInlineScript('
+ document.addEventListener("DOMContentLoaded", function () {
+  const b = document.querySelector(".ktc-burger");
+  const m = document.getElementById("ktc-menu-list");
+  if (!b || !m) { return; }
+  b.addEventListener("click", function () {
+    const open = b.getAttribute("aria-expanded") === "true";
+    b.setAttribute("aria-expanded", open ? "false" : "true");
+    m.classList.toggle("ktc-open", !open);
+  });
+ });
+');
+
 // Override 'template.active' asset to set correct ltr/rtl dependency
 $wa->registerStyle('template.active', '', [], [], ['template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'ltr')]);
 
@@ -187,7 +202,12 @@ $wa->getAsset('style', 'fontawesome')->setAttribute('rel', 'lazy-stylesheet');
         <?php if ($this->countModules('menu', true) || $this->countModules('search', true)) : ?>
             <div class="grid-child container-nav">
                 <?php if ($this->countModules('menu', true)) : ?>
-                    <jdoc:include type="modules" name="menu" style="none" />
+                    <button class="ktc-burger" type="button" aria-expanded="false" aria-controls="ktc-menu-list">
+                        <span class="ktc-burger-lines" aria-hidden="true"></span>Menu
+                    </button>
+                    <div id="ktc-menu-list" class="ktc-menu-list">
+                        <jdoc:include type="modules" name="menu" style="none" />
+                    </div>
                 <?php endif; ?>
                 <?php if ($this->countModules('search', true)) : ?>
                     <div class="container-search">
