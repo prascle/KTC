@@ -321,3 +321,66 @@
   .container-header .mod-menu > li:nth-of-type(7) > :is(a, span, button)::before { content: "🔑"; }
   .container-header .mod-menu > li:nth-of-type(8) > :is(a, span, button)::before { content: "✉️"; }
 }
+
+/* --------------------------------------------------------------------------
+   8. Bande de connexion (position topbar) — fine et sur une seule ligne
+   Décision de Paul du 05/11 : le module de connexion reste en haut à droite ;
+   « Bonjour … » et le bouton Déconnexion sur la même ligne ( Markup :
+   .mod-login-logout > .login-greeting puis .logout-button ). Pour les
+   visiteurs, le formulaire s'affiche de façon compacte (identifiant, mot
+   de passe, bouton) ; « Se souvenir de moi » et liens d'oubli restent sur
+   la page Connexion.
+   -------------------------------------------------------------------------- */
+.container-topbar .mod-login-logout {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .75rem;
+  margin: 0;
+}
+
+.container-topbar .mod-login-logout .login-greeting,
+.container-topbar .mod-login-logout .logout-button {
+  margin: 0;
+}
+
+.container-topbar .mod-login-logout .btn,
+.container-topbar .mod-login .btn {
+  padding: .2rem .75rem;
+  font-size: .875rem;
+}
+
+.container-topbar .mod-login {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .4rem;
+  margin: 0;
+}
+
+.container-topbar .mod-login .form-group {
+  margin: 0;
+}
+
+.container-topbar .mod-login .mod-login__username,
+.container-topbar .mod-login .mod-login__password {
+  display: flex;
+}
+
+.container-topbar .mod-login .input-group {
+  width: auto;
+}
+
+.container-topbar .mod-login .input-group .form-control {
+  width: 10rem;
+}
+
+.container-topbar .mod-login .mod-login__submit .btn {
+  width: auto;
+}
+
+.container-topbar .mod-login .mod-login__remember,
+.container-topbar .mod-login .mod-login__options {
+  display: none;
+}
