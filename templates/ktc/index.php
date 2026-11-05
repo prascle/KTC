@@ -104,7 +104,11 @@ $wa->usePreset('template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'l
 
 // KTC : feuille de style du template enfant (palette P3, boutons, badges, encadrés) —
 // chargée via l'API document (chemin déterministe, rendue après les assets du template).
-$this->addStyleSheet(Uri::root(true) . '/templates/ktc/css/template.css', ['version' => 'auto']);
+// Version = date du fichier : l'URL change à chaque déploiement git, sinon les
+// navigateurs gardent l'ancienne feuille en cache (la version « média » de Joomla
+// ne change pas lors d'un déploiement par git — retour du test du 05/11).
+$ktcCssFile = JPATH_PUBLIC . '/templates/ktc/css/template.css';
+$this->addStyleSheet(Uri::root(true) . '/templates/ktc/css/template.css', ['version' => is_file($ktcCssFile) ? date('Ymd-His', (int) filemtime($ktcCssFile)) : 'auto']);
 
 // KTC : bascule du menu mobile (burger — arbitrage M1, bouton visible < 992 px).
 $wa->addInlineScript('
