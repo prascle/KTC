@@ -10,11 +10,17 @@
 
 /*
  * Template enfant « ktc » — dérivé de templates/cassiopeia/index.php (Joomla 6.2).
- * Quatre écarts seulement par rapport au parent :
+ * Six écarts seulement par rapport au parent :
  *   1. chargement de la feuille de style enfant (palette P3, composants KTC) ;
  *   2. barre de navigation permanente (sticky) forcée ;
  *   3. menu mobile « burger » avec panneau à grandes entrées (arbitrage M1) ;
- *   4. présent (voir css/template.css pour le reste).
+ *   4. scripts inline : carrousel de l'accueil, sommaire automatique ;
+ *   5. bouton et panneau « Confort » de l'en-tête (arbitrage D24 : mode
+ *      auto/clair/sombre + taille du texte) et entrée « Réglages » du burger ;
+ *   6. barre basse mobile « type app » (arbitrage BB) construite par script
+ *      depuis le menu réel (aucune adresse en dur).
+ * À chaque mise à jour du cœur Joomla (via PR, décision D16), vérifier si
+ * templates/cassiopeia/index.php évolue et reporter les changements ici.
  * À chaque mise à jour du cœur Joomla (via PR, décision D16), vérifier si
  * templates/cassiopeia/index.php évolue et reporter les changements ici.
  */
@@ -200,6 +206,163 @@ $wa->addInlineScript('
  });
 ');
 
+// KTC : réglages de confort (arbitrages D24 + S) — mode d'affichage
+// auto/clair/sombre et taille du texte, persistés par navigateur
+// (localStorage). La première partie s'exécute immédiatement dans le <head> :
+// l'attribut data-ktc-theme est posé avant le premier rendu, pas de flash
+// blanc en mode sombre. Le panneau s'ouvre depuis l'icône d'en-tête ; sur
+// mobile, une entrée « Réglages » est ajoutée en bas du burger.
+$wa->addInlineScript('
+ (function () {
+  var racine = document.documentElement;
+  var systeme = window.matchMedia("(prefers-color-scheme: dark)");
+  var lire = function (cle, defaut) {
+    try { return window.localStorage.getItem(cle) || defaut; } catch (e) { return defaut; }
+  };
+  var ecrire = function (cle, valeur) {
+    try { window.localStorage.setItem(cle, valeur); } catch (e) {}
+  };
+  var appliquerTheme = function () {
+    var choix = lire("ktc-theme", "auto");
+    var nuit = choix === "sombre" || (choix === "auto" && systeme.matches);
+    racine.setAttribute("data-ktc-theme", nuit ? "sombre" : "clair");
+  };
+  var appliquerTaille = function () {
+    var taille = lire("ktc-taille", "moyenne");
+    racine.classList.remove("ktc-taille-petite", "ktc-taille-grande");
+    if (taille === "petite") { racine.classList.add("ktc-taille-petite"); }
+    if (taille === "grande") { racine.classList.add("ktc-taille-grande"); }
+  };
+  appliquerTheme();
+  appliquerTaille();
+  systeme.addEventListener("change", appliquerTheme);
+  document.addEventListener("DOMContentLoaded", function () {
+    var panneau = document.getElementById("ktc-confort");
+    var bouton = document.querySelector(".ktc-confort-bouton");
+    var burger = document.querySelector(".ktc-burger");
+    var liste = document.getElementById("ktc-menu-list");
+    if (!panneau) { return; }
+    var marquer = function () {
+      var theme = lire("ktc-theme", "auto");
+      var taille = lire("ktc-taille", "moyenne");
+      panneau.querySelectorAll("[data-theme-choix]").forEach(function (b) {
+        b.classList.toggle("actif", b.getAttribute("data-theme-choix") === theme);
+      });
+      panneau.querySelectorAll("[data-taille-choix]").forEach(function (b) {
+        b.classList.toggle("actif", b.getAttribute("data-taille-choix") === taille);
+      });
+    };
+    panneau.querySelectorAll("[data-theme-choix]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        ecrire("ktc-theme", b.getAttribute("data-theme-choix"));
+        appliquerTheme();
+        marquer();
+      });
+    });
+    panneau.querySelectorAll("[data-taille-choix]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        ecrire("ktc-taille", b.getAttribute("data-taille-choix"));
+        appliquerTaille();
+        marquer();
+      });
+    });
+    var basculer = function (ouvrir) {
+      panneau.classList.toggle("ktc-open", ouvrir);
+      if (bouton) { bouton.setAttribute("aria-expanded", ouvrir ? "true" : "false"); }
+    };
+    if (bouton) {
+      bouton.addEventListener("click", function () {
+        basculer(!panneau.classList.contains("ktc-open"));
+      });
+    }
+    document.addEventListener("click", function (e) {
+      if (panneau.classList.contains("ktc-open")
+          && !panneau.contains(e.target) && !(bouton && bouton.contains(e.target))) {
+        basculer(false);
+      }
+    });
+    var ul = liste ? liste.querySelector(".mod-menu") : null;
+    if (ul && burger) {
+      var li = document.createElement("li");
+      li.className = "ktc-li-reglages";
+      var entree = document.createElement("button");
+      entree.type = "button";
+      entree.textContent = "Réglages";
+      entree.addEventListener("click", function () {
+        burger.setAttribute("aria-expanded", "false");
+        liste.classList.remove("ktc-open");
+        basculer(true);
+      });
+      li.appendChild(entree);
+      ul.appendChild(li);
+    }
+    marquer();
+  });
+ });
+');
+
+// KTC : barre basse mobile « type app » (arbitrage BB du laboratoire,
+// entrées confirmées par Paul le 06/11 : Accueil, la rubrique des règles
+// [La maison], la SCI, Travaux, et le bouton Menu). Construite depuis le
+// menu réel : liens toujours corrects, aucune adresse en dur ; les
+// raccourcis sont la 1re, 2e, 3e et 5e entrée du menu principal (ordre
+// D20 — ajuster ici si le menu évolue). Visible < 992 px uniquement.
+$wa->addInlineScript('
+ document.addEventListener("DOMContentLoaded", function () {
+  var ul = document.querySelector("#ktc-menu-list .mod-menu");
+  if (!ul) { return; }
+  var entrees = ul.children;
+  var positions = [0, 1, 2, 4];
+  var icones = ["&#127968;", "&#127969;", "&#127963;&#65039;", "&#128296;"];
+  var nav = document.createElement("nav");
+  nav.className = "ktc-bb";
+  nav.setAttribute("aria-label", "Accès rapides");
+  var courante = window.location.pathname + window.location.search;
+  positions.forEach(function (position, i) {
+    var li = entrees[position];
+    var lien = li ? li.querySelector("a") : null;
+    if (!lien) { return; }
+    var item = document.createElement("a");
+    item.href = lien.href;
+    item.className = "ktc-bb-item";
+    var icone = document.createElement("span");
+    icone.className = "ktc-bb-icone";
+    icone.setAttribute("aria-hidden", "true");
+    icone.innerHTML = icones[i];
+    var libelle = document.createElement("span");
+    libelle.textContent = lien.textContent.trim();
+    item.appendChild(icone);
+    item.appendChild(libelle);
+    try {
+      var u = new URL(lien.href);
+      if (u.pathname + u.search === courante) { item.classList.add("actif"); }
+    } catch (e) {}
+    nav.appendChild(item);
+  });
+  var boutonMenu = document.createElement("button");
+  boutonMenu.type = "button";
+  boutonMenu.className = "ktc-bb-item ktc-bb-menu";
+  var iconeMenu = document.createElement("span");
+  iconeMenu.className = "ktc-bb-icone";
+  iconeMenu.setAttribute("aria-hidden", "true");
+  iconeMenu.innerHTML = "&#9776;";
+  var libelleMenu = document.createElement("span");
+  libelleMenu.textContent = "Menu";
+  boutonMenu.appendChild(iconeMenu);
+  boutonMenu.appendChild(libelleMenu);
+  boutonMenu.addEventListener("click", function () {
+    var b = document.querySelector(".ktc-burger");
+    var m = document.getElementById("ktc-menu-list");
+    if (!b || !m) { return; }
+    var ouvrir = !(b.getAttribute("aria-expanded") === "true");
+    b.setAttribute("aria-expanded", ouvrir ? "true" : "false");
+    m.classList.toggle("ktc-open", ouvrir);
+  });
+  nav.appendChild(boutonMenu);
+  document.body.appendChild(nav);
+ });
+');
+
 // Override 'template.active' asset to set correct ltr/rtl dependency
 $wa->registerStyle('template.active', '', [], [], ['template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'ltr')]);
 
@@ -294,6 +457,23 @@ $wa->getAsset('style', 'fontawesome')->setAttribute('rel', 'lazy-stylesheet');
                         <jdoc:include type="modules" name="search" style="none" />
                     </div>
                 <?php endif; ?>
+                <button class="ktc-confort-bouton" type="button" aria-expanded="false" aria-controls="ktc-confort">
+                    <span aria-hidden="true">&#9881;&#65039;</span><span class="visually-hidden">Réglages de confort</span>
+                </button>
+                <div id="ktc-confort" class="ktc-confort">
+                    <p class="ktc-confort-titre">Mode d'affichage</p>
+                    <div class="ktc-confort-choix" role="group" aria-label="Mode d'affichage">
+                        <button type="button" data-theme-choix="auto">Auto</button>
+                        <button type="button" data-theme-choix="clair">Clair</button>
+                        <button type="button" data-theme-choix="sombre">Sombre</button>
+                    </div>
+                    <p class="ktc-confort-titre">Taille du texte</p>
+                    <div class="ktc-confort-choix" role="group" aria-label="Taille du texte">
+                        <button type="button" data-taille-choix="petite">Petite</button>
+                        <button type="button" data-taille-choix="moyenne">Moyenne</button>
+                        <button type="button" data-taille-choix="grande">Grande</button>
+                    </div>
+                </div>
             </div>
         <?php endif; ?>
     </header>

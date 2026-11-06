@@ -691,3 +691,270 @@
 .ktc-sommaire li.ktc-niveau-h4 {
   margin-left: 2.5rem;
 }
+
+/* --------------------------------------------------------------------------
+   12. Mode sombre (arbitrage S + D23) — piloté par l'attribut data-ktc-theme
+   sur <html>, posé avant le premier rendu par le script du index.php selon
+   le réglage du panneau « Confort » : auto (préférence de l'appareil),
+   clair ou sombre. L'en-tête garde son identité bleue, assombrie la nuit ;
+   le reste du site passe sur des teintes nocturnes sans gris trop clair.
+   -------------------------------------------------------------------------- */
+html[data-ktc-theme="sombre"] {
+  color-scheme: dark; /* champs, ascenseurs et composants natifs suivent */
+  --ktc-bleu: #8aa1d8; /* liens lisibles sur fond sombre */
+  --ktc-bleu-fonce: #b6c3ec; /* rôle nocturne : couleur de texte accentuée */
+  --ktc-bleu-clair: #252d45; /* fonds « clairs » de jour, sombres la nuit */
+  --ktc-rose: #c98277;
+  --ktc-rose-fonce: #dc9484;
+  --ktc-etude: #93a0af;
+  --bs-body-bg: #141927;
+  --bs-body-color: #e6e9f2;
+  --bs-border-color: #343e5a;
+  --cassiopeia-color-primary: #46609c;
+  --cassiopeia-color-hover: #33477c;
+}
+
+html[data-ktc-theme="sombre"] body {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+/* En-tête : identité bleue assombrie */
+html[data-ktc-theme="sombre"] .container-header {
+  background-color: #1c2749;
+  background-image: linear-gradient(135deg, #1c2749 0%, #131b36 100%);
+}
+
+/* Panneau du burger et sous-menus : fond nocturne */
+html[data-ktc-theme="sombre"] .ktc-menu-list,
+html[data-ktc-theme="sombre"] .container-header .mm-collapse {
+  background-color: #1a2133;
+}
+
+html[data-ktc-theme="sombre"] .container-header .mod-menu > li > a,
+html[data-ktc-theme="sombre"] .container-header .mod-menu > li > span,
+html[data-ktc-theme="sombre"] .container-header .mod-menu > li > button,
+html[data-ktc-theme="sombre"] .container-header .mod-menu .mod-menu__sub > li > a {
+  border-bottom-color: #2b3350;
+}
+
+/* Cartes des listes et fiche chantier */
+html[data-ktc-theme="sombre"] .com-content-category-blog .blog-item,
+html[data-ktc-theme="sombre"] .com-content-featured-blog .blog-item,
+html[data-ktc-theme="sombre"] .ktc-fiche-chantier {
+  background-color: #1f2740;
+  border-color: #343e5a;
+}
+
+/* Carrousel : le fond derrière les photos reste très sombre */
+html[data-ktc-theme="sombre"] .ktc-carrousel {
+  background-color: #0f1421;
+}
+
+/* Étiquettes de la fiche chantier */
+html[data-ktc-theme="sombre"] .ktc-chantier-etiquette {
+  color: #a3aec0;
+}
+
+/* Pied de page */
+html[data-ktc-theme="sombre"] .container-footer.footer {
+  border-top-color: #343e5a;
+}
+
+/* Modules encadrés (positions « card ») */
+html[data-ktc-theme="sombre"] .card {
+  background-color: #1f2740;
+  border-color: #343e5a;
+  color: var(--bs-body-color);
+}
+
+html[data-ktc-theme="sombre"] .card-header {
+  background-color: #252d45;
+  border-bottom-color: #343e5a;
+}
+
+/* Tableaux d'articles */
+html[data-ktc-theme="sombre"] .table {
+  --bs-table-bg: #1f2740;
+  --bs-table-color: var(--bs-body-color);
+  border-color: #343e5a;
+}
+
+/* Panneau « Confort » et barre basse en mode sombre */
+html[data-ktc-theme="sombre"] .ktc-confort {
+  background-color: #1a2133;
+  border-color: #343e5a;
+}
+
+html[data-ktc-theme="sombre"] .ktc-confort-titre {
+  color: #a3aec0;
+}
+
+html[data-ktc-theme="sombre"] .ktc-bb {
+  background-color: #161d30;
+  border-top-color: #343e5a;
+}
+
+html[data-ktc-theme="sombre"] .ktc-bb-item {
+  color: #a3aec0;
+}
+
+/* --------------------------------------------------------------------------
+   13. Réglages de confort (D24) et barre basse mobile (arbitrage BB).
+   Le panneau « Confort » de l'en-tête (icône visible sur tous les écrans)
+   regroupe mode d'affichage et taille du texte ; l'entrée « Réglages » du
+   burger (mobile) ouvre le même panneau. La barre basse s'affiche sur
+   smartphone et tablette uniquement (< 992 px).
+   -------------------------------------------------------------------------- */
+.container-nav {
+  position: relative;
+}
+
+.ktc-confort-bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.05rem;
+  color: #fff;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, .85);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.ktc-confort-bouton:hover,
+.ktc-confort-bouton:focus-visible {
+  background-color: rgba(255, 255, 255, .15);
+}
+
+.ktc-confort {
+  display: none;
+  position: absolute;
+  top: calc(100% + .5rem);
+  right: 0;
+  z-index: 1030;
+  min-width: 15rem;
+  padding: 1rem 1.25rem;
+  background-color: #fff;
+  border: 1px solid #d5dcee;
+  border-radius: .75rem;
+  box-shadow: 0 .5rem 1.25rem rgba(51, 71, 124, .18);
+}
+
+.ktc-confort.ktc-open {
+  display: block;
+}
+
+.ktc-confort-titre {
+  margin: 0 0 .4rem;
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #5d6b78;
+}
+
+.ktc-confort-titre + .ktc-confort-choix {
+  margin-bottom: .9rem;
+}
+
+.ktc-confort-choix {
+  display: flex;
+  gap: .35rem;
+}
+
+.ktc-confort-choix button {
+  flex: 1;
+  padding: .35rem .5rem;
+  font-size: .875rem;
+  color: var(--ktc-bleu-fonce);
+  background-color: var(--ktc-bleu-clair);
+  border: 0;
+  border-radius: .45rem;
+  cursor: pointer;
+}
+
+.ktc-confort-choix button.actif {
+  color: #fff;
+  background-color: var(--ktc-bleu);
+}
+
+/* Entrée « Réglages » du burger : icône sur mobile, absente du menu
+   horizontal des grands écrans (classe dédiée, indépendante de l'ordre) */
+@media (max-width: 991.98px) {
+  .container-header .mod-menu > li.ktc-li-reglages > button::before {
+    content: "\00269B\FE0F"; /* engrenage */
+  }
+}
+
+@media (min-width: 992px) {
+  .container-header .mod-menu > li.ktc-li-reglages {
+    display: none;
+  }
+}
+
+/* Taille du texte (moyenne = taille native du site) */
+html.ktc-taille-petite {
+  font-size: 93.75%; /* 15 px */
+}
+
+html.ktc-taille-grande {
+  font-size: 118.75%; /* 19 px */
+}
+
+/* Barre basse BB : construction par script depuis le menu réel */
+.ktc-bb {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .ktc-bb {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    display: flex;
+    justify-content: space-around;
+    padding: .3rem .25rem calc(.3rem + env(safe-area-inset-bottom, 0));
+    background-color: #fff;
+    border-top: 1px solid #d5dcee;
+    box-shadow: 0 -.2rem .6rem rgba(51, 71, 124, .12);
+  }
+
+  .ktc-bb-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .1rem;
+    padding: .25rem .5rem;
+    font-size: .72rem;
+    line-height: 1.2;
+    color: #5d6b78;
+    background-color: transparent;
+    border: 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ktc-bb-icone {
+    font-size: 1.3rem;
+  }
+
+  .ktc-bb-item.actif {
+    color: var(--ktc-rose);
+    font-weight: 600;
+  }
+
+  /* Le contenu ne passe pas sous la barre */
+  body {
+    padding-bottom: 4.4rem;
+  }
+
+  /* Le bouton « retour en haut » ne chevauche pas la barre */
+  .back-to-top-link {
+    bottom: 5rem;
+  }
+}
