@@ -165,6 +165,7 @@ $wa->addInlineScript('
     if (suivante) { suivante.addEventListener("click", function () { defile(piste.clientWidth); }); }
   });
  });
+');
 
 // Override 'template.active' asset to set correct ltr/rtl dependency
 $wa->registerStyle('template.active', '', [], [], ['template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'ltr')]);
