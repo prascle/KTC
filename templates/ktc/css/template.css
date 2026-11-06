@@ -958,3 +958,24 @@ html.ktc-taille-grande {
     bottom: 5rem;
   }
 }
+
+/* Ordre des éléments de la barre d'en-tête sur mobile (retour du test du
+   06/11) : le bouton Confort reste sur la ligne du burger, à droite ;
+   seul le panneau du burger (largeur 100 %) passe à la ligne en dessous. */
+@media (max-width: 991.98px) {
+  .container-nav .ktc-burger {
+    order: 1;
+  }
+
+  .container-nav .ktc-confort-bouton {
+    order: 2;
+  }
+
+  .container-nav .container-search {
+    order: 3;
+  }
+
+  .container-nav .ktc-menu-list {
+    order: 4;
+  }
+}
