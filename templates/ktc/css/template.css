@@ -496,8 +496,9 @@
    blanche : image d'introduction au format 16/9, titre et texte dessous.
    L'image d'une carte se choisit dans l'article, onglet « Images et
    liens → Image d'introduction ». Tout repose sur les classes standards
-   de com_content (.blog-item, .item-image, .item-content) : aucun
-   override nécessaire.
+   de com_content (.blog-item, .item-image, .item-content) ; la troncature
+   du texte passe par l'override html/com_content/category/blog_item.php
+   (texte encapsulé dans .ktc-intro).
    -------------------------------------------------------------------------- */
 .com-content-category-blog .blog-item,
 .com-content-featured-blog .blog-item {
@@ -545,6 +546,18 @@
 .com-content-category-blog .blog-item .item-content > :last-child,
 .com-content-featured-blog .blog-item .item-content > :last-child {
   margin-bottom: 0;
+}
+
+/* Texte de la carte tronqué à 3 lignes (retour du test du 06/11) :
+   sans coupure « Lire la suite » dans l'article, le texte d'intro affiché
+   dans les listes est le texte entier. L'override html/com_content/category/
+   blog_item.php encadre ce texte dans .ktc-intro et cette règle le raccourcit
+   automatiquement — les cartes restent succinctes quel que soit le rédacteur. */
+.com-content-category-blog .blog-item .item-content .ktc-intro {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 /* Mot d'accueil (module « Contenu personnalisé », position Bannière,
