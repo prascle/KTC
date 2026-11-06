@@ -563,3 +563,118 @@
 .ktc-bienvenue > :last-child {
   margin-bottom: 0;
 }
+
+/* --------------------------------------------------------------------------
+   11. Fiche chantier (arbitrage B) + sommaire automatique des articles
+   La fiche chantier est rendue par l'override html/com_content/article/
+   default.php à partir des champs du groupe « Fiche chantier » (Statut du
+   chantier, Avancement, Budget estimé, Coût constaté, Date de décision) :
+   le rédacteur n'écrit aucun HTML. Le sommaire des articles longs est
+   généré par le script du index.php (au moins 3 sous-titres) et inséré
+   en tête du texte.
+   -------------------------------------------------------------------------- */
+.ktc-fiche-chantier {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  background-color: #fff;
+  border: 1px solid #d5dcee;
+  border-radius: .75rem;
+}
+
+.ktc-fiche-chantier .badge {
+  align-self: flex-start;
+}
+
+.ktc-chantier-avancement {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.ktc-chantier-barre {
+  flex: 1 1 12rem;
+  max-width: 20rem;
+  height: .55rem;
+  background-color: var(--ktc-bleu-clair);
+  border-radius: .3rem;
+  overflow: hidden;
+}
+
+.ktc-chantier-barre > span {
+  display: block;
+  height: 100%;
+  background-color: var(--ktc-bleu);
+  border-radius: .3rem;
+  transition: width .3s ease;
+}
+
+/* Couleur de la barre selon le statut : bleu (à l'étude / à programmer) */
+.ktc-chantier-barre.ktc-barre-encours > span {
+  background-color: var(--ktc-encours);
+}
+
+.ktc-chantier-barre.ktc-barre-termine > span {
+  background-color: var(--ktc-termine);
+}
+
+.ktc-chantier-pourcentage {
+  font-weight: 600;
+  color: var(--ktc-bleu-fonce);
+}
+
+.ktc-chantier-chiffres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 2rem;
+}
+
+.ktc-chantier-chiffres > div {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+}
+
+.ktc-chantier-etiquette {
+  font-size: .875rem;
+  color: #5d6b78;
+}
+
+.ktc-chantier-chiffres strong {
+  font-size: 1.05rem;
+  color: var(--ktc-bleu-fonce);
+}
+
+/* Sommaire automatique (généré par le script du index.php) */
+.ktc-sommaire {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  background-color: var(--ktc-bleu-clair);
+  border-inline-start: .3rem solid var(--ktc-bleu);
+  border-radius: .5rem;
+}
+
+.ktc-sommaire-titre {
+  margin: 0 0 .5rem;
+  font-weight: 600;
+  color: var(--ktc-bleu-fonce);
+}
+
+.ktc-sommaire ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.ktc-sommaire li {
+  margin: .2rem 0;
+}
+
+.ktc-sommaire li.ktc-niveau-h3 {
+  margin-left: 1.25rem;
+}
+
+.ktc-sommaire li.ktc-niveau-h4 {
+  margin-left: 2.5rem;
+}
