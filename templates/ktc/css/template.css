@@ -425,7 +425,7 @@
 .ktc-carrousel-piste img {
   display: block;
   width: 100%;
-  height: clamp(15rem, 38vw, 26rem);
+  height: clamp(15rem, 38vw, 34rem);
   object-fit: cover;
 }
 
