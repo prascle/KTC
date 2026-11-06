@@ -206,23 +206,29 @@ $wa->addInlineScript('
 
 // KTC : réglages de confort (arbitrages D24 + S) — mode d'affichage
 // auto/clair/sombre et taille du texte, persistés par navigateur
-// (localStorage). La première partie s'exécute immédiatement dans le <head> :
-// l'attribut data-ktc-theme est posé avant le premier rendu, pas de flash
-// blanc en mode sombre. Le panneau s'ouvre depuis l'icône d'en-tête ; sur
-// mobile, une entrée « Réglages » est ajoutée en bas du burger.
+// (localStorage). Robustesse (retour du test du 06/11) : le branchement de
+// l'interface est enregistré AVANT toute application du thème et tout
+// appel sensible est gardé par try/catch — sur un navigateur où l'écoute
+// matchMedia n'existe pas (iOS < 14, vieux Chrome), le script s'interrompait
+// avant de brancher le bouton et l'entrée de menu : le panneau s'ouvre
+// désormais quoi qu'il arrive. L'écoute de la préférence de l'appareil a un
+// repli addListener pour ces navigateurs. Enfin, le détecteur de « clic
+// extérieur » ignore les clics venant de l'entrée « Réglages » du burger,
+// qui refermait le panneau qu'elle venait d'ouvrir.
 $wa->addInlineScript('
  (function () {
   var racine = document.documentElement;
-  var systeme = window.matchMedia("(prefers-color-scheme: dark)");
   var lire = function (cle, defaut) {
     try { return window.localStorage.getItem(cle) || defaut; } catch (e) { return defaut; }
   };
   var ecrire = function (cle, valeur) {
     try { window.localStorage.setItem(cle, valeur); } catch (e) {}
   };
+  var systeme = null;
+  try { systeme = window.matchMedia("(prefers-color-scheme: dark)"); } catch (e) {}
   var appliquerTheme = function () {
     var choix = lire("ktc-theme", "auto");
-    var nuit = choix === "sombre" || (choix === "auto" && systeme.matches);
+    var nuit = choix === "sombre" || (choix === "auto" && systeme && systeme.matches);
     racine.setAttribute("data-ktc-theme", nuit ? "sombre" : "clair");
   };
   var appliquerTaille = function () {
@@ -231,9 +237,6 @@ $wa->addInlineScript('
     if (taille === "petite") { racine.classList.add("ktc-taille-petite"); }
     if (taille === "grande") { racine.classList.add("ktc-taille-grande"); }
   };
-  appliquerTheme();
-  appliquerTaille();
-  systeme.addEventListener("change", appliquerTheme);
   document.addEventListener("DOMContentLoaded", function () {
     var panneau = document.getElementById("ktc-confort");
     var bouton = document.querySelector(".ktc-confort-bouton");
@@ -250,6 +253,10 @@ $wa->addInlineScript('
         b.classList.toggle("actif", b.getAttribute("data-taille-choix") === taille);
       });
     };
+    var basculer = function (ouvrir) {
+      panneau.classList.toggle("ktc-open", ouvrir);
+      if (bouton) { bouton.setAttribute("aria-expanded", ouvrir ? "true" : "false"); }
+    };
     panneau.querySelectorAll("[data-theme-choix]").forEach(function (b) {
       b.addEventListener("click", function () {
         ecrire("ktc-theme", b.getAttribute("data-theme-choix"));
@@ -264,18 +271,18 @@ $wa->addInlineScript('
         marquer();
       });
     });
-    var basculer = function (ouvrir) {
-      panneau.classList.toggle("ktc-open", ouvrir);
-      if (bouton) { bouton.setAttribute("aria-expanded", ouvrir ? "true" : "false"); }
-    };
     if (bouton) {
       bouton.addEventListener("click", function () {
         basculer(!panneau.classList.contains("ktc-open"));
       });
     }
     document.addEventListener("click", function (e) {
+      var cible = e.target;
+      var depuisEntree = (cible && cible.closest) ? cible.closest(".ktc-li-reglages") : null;
       if (panneau.classList.contains("ktc-open")
-          && !panneau.contains(e.target) && !(bouton && bouton.contains(e.target))) {
+          && !panneau.contains(cible)
+          && !(bouton && bouton.contains(cible))
+          && !depuisEntree) {
         basculer(false);
       }
     });
@@ -296,6 +303,17 @@ $wa->addInlineScript('
     }
     marquer();
   });
+  try { appliquerTheme(); } catch (e) {}
+  try { appliquerTaille(); } catch (e) {}
+  try {
+    if (systeme) {
+      if (systeme.addEventListener) {
+        systeme.addEventListener("change", appliquerTheme);
+      } else if (systeme.addListener) {
+        systeme.addListener(function () { appliquerTheme(); });
+      }
+    }
+  } catch (e) {}
  });
 ');
 
