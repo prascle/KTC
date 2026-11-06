@@ -124,6 +124,49 @@ $wa->addInlineScript('
  });
 ');
 
+// KTC : carrousel de l'accueil (arbitrage D21) — le script crée les points
+// de navigation, branche les flèches et suit le défilement de la piste.
+// Sans JavaScript, la piste reste défilable au doigt ou à la molette
+// (scroll natif) ; le défilement animé respecte prefers-reduced-motion.
+$wa->addInlineScript('
+ document.addEventListener("DOMContentLoaded", function () {
+  var fluide = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll(".ktc-carrousel").forEach(function (carrousel) {
+    var piste = carrousel.querySelector(".ktc-carrousel-piste");
+    var points = carrousel.querySelector(".ktc-carrousel-points");
+    var nb = piste ? piste.querySelectorAll("figure").length : 0;
+    if (!piste || nb === 0) { return; }
+    var defile = function (gauche) {
+      piste.scrollBy({ left: gauche, behavior: fluide ? "smooth" : "auto" });
+    };
+    if (points) {
+      var i;
+      for (i = 0; i < nb; i++) {
+        (function (indice) {
+          var point = document.createElement("button");
+          point.type = "button";
+          point.setAttribute("aria-label", "Aller à la photo " + (indice + 1));
+          point.addEventListener("click", function () {
+            piste.scrollTo({ left: indice * piste.clientWidth, behavior: fluide ? "smooth" : "auto" });
+          });
+          points.appendChild(point);
+        })(i);
+      }
+      piste.addEventListener("scroll", function () {
+        var actif = Math.min(nb - 1, Math.max(0, Math.round(piste.scrollLeft / piste.clientWidth)));
+        Array.prototype.forEach.call(points.children, function (point, n) {
+          point.classList.toggle("actif", n === actif);
+        });
+      });
+    }
+    var precedente = carrousel.querySelector(".ktc-carrousel-fleche.ktc-precedente");
+    var suivante = carrousel.querySelector(".ktc-carrousel-fleche.ktc-suivante");
+    if (precedente) { precedente.addEventListener("click", function () { defile(-piste.clientWidth); }); }
+    if (suivante) { suivante.addEventListener("click", function () { defile(piste.clientWidth); }); }
+  });
+ });
+');
+
 // Override 'template.active' asset to set correct ltr/rtl dependency
 $wa->registerStyle('template.active', '', [], [], ['template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'ltr')]);
 

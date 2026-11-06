@@ -384,3 +384,182 @@
 .container-topbar .mod-login .mod-login__options {
   display: none;
 }
+
+/* --------------------------------------------------------------------------
+   9. Carrousel de l'accueil (arbitrage D21) — photos pleine largeur
+   Module « Contenu personnalisé » en position Bannière, affecté à la page
+   d'accueil uniquement (voir docs/guides/03-accueil-et-listes.md) :
+   <div class="ktc-carrousel">
+     <div class="ktc-carrousel-piste">
+       <figure><img src="images/accueil/…" alt="…" loading="lazy"></figure>…
+     </div>
+     <button class="ktc-carrousel-fleche ktc-precedente" type="button">‹</button>
+     <button class="ktc-carrousel-fleche ktc-suivante" type="button">›</button>
+     <div class="ktc-carrousel-points"></div>
+   </div>
+   La piste défile nativement (doigt, molette, trackpad) ; le script ajouté
+   dans index.php crée les points et branche les flèches.
+   -------------------------------------------------------------------------- */
+.ktc-carrousel {
+  position: relative;
+  background-color: var(--ktc-bleu-fonce);
+}
+
+.ktc-carrousel-piste {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox : pas de barre de défilement visible */
+}
+
+.ktc-carrousel-piste::-webkit-scrollbar {
+  display: none; /* Chrome, Edge, Safari */
+}
+
+.ktc-carrousel-piste figure {
+  flex: 0 0 100%;
+  margin: 0;
+  scroll-snap-align: center;
+}
+
+.ktc-carrousel-piste img {
+  display: block;
+  width: 100%;
+  height: clamp(15rem, 38vw, 26rem);
+  object-fit: cover;
+}
+
+.ktc-carrousel-fleche {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0 .15rem;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--ktc-bleu-fonce);
+  background-color: rgba(255, 255, 255, .88);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.ktc-carrousel-fleche:hover,
+.ktc-carrousel-fleche:focus-visible {
+  color: var(--ktc-rose-fonce);
+  background-color: #fff;
+}
+
+.ktc-carrousel-fleche.ktc-precedente {
+  left: .9rem;
+}
+
+.ktc-carrousel-fleche.ktc-suivante {
+  right: .9rem;
+}
+
+.ktc-carrousel-points {
+  position: absolute;
+  bottom: .9rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.ktc-carrousel-points button {
+  width: .65rem;
+  height: .65rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, .55);
+  cursor: pointer;
+}
+
+.ktc-carrousel-points button:hover {
+  background-color: rgba(255, 255, 255, .9);
+}
+
+.ktc-carrousel-points button.actif {
+  background-color: var(--ktc-rose);
+}
+
+/* --------------------------------------------------------------------------
+   10. Listes d'articles en cartes (arbitrage L1) + mot d'accueil
+   Les pages « Blog d'une catégorie » affichent chaque article en carte
+   blanche : image d'introduction au format 16/9, titre et texte dessous.
+   L'image d'une carte se choisit dans l'article, onglet « Images et
+   liens → Image d'introduction ». Tout repose sur les classes standards
+   de com_content (.blog-item, .item-image, .item-content) : aucun
+   override nécessaire.
+   -------------------------------------------------------------------------- */
+.com-content-category-blog .blog-item,
+.com-content-featured-blog .blog-item {
+  background-color: #fff;
+  border: 1px solid #d5dcee;
+  border-radius: .75rem;
+  box-shadow: 0 1px 3px rgba(51, 71, 124, .07);
+  overflow: hidden;
+  transition: box-shadow .25s ease;
+}
+
+.com-content-category-blog .blog-item:hover,
+.com-content-featured-blog .blog-item:hover {
+  box-shadow: 0 .5rem 1.25rem rgba(51, 71, 124, .18);
+}
+
+/* En colonnes (masonry), une carte ne doit jamais être coupée en deux */
+.com-content-category-blog .blog-item,
+.com-content-featured-blog .blog-item {
+  break-inside: avoid;
+}
+
+.com-content-category-blog .blog-item .item-image,
+.com-content-featured-blog .blog-item .item-image {
+  margin: 0;
+}
+
+.com-content-category-blog .blog-item .item-image img,
+.com-content-featured-blog .blog-item .item-image img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.com-content-category-blog .blog-item .item-content,
+.com-content-featured-blog .blog-item .item-content {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.com-content-category-blog .blog-item .item-content > :first-child,
+.com-content-featured-blog .blog-item .item-content > :first-child {
+  margin-top: 0;
+}
+
+.com-content-category-blog .blog-item .item-content > :last-child,
+.com-content-featured-blog .blog-item .item-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* Mot d'accueil (module « Contenu personnalisé », position Bannière,
+   sous le carrousel) : <div class="ktc-bienvenue">…</div> */
+.ktc-bienvenue {
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2rem;
+  text-align: center;
+}
+
+.ktc-bienvenue > :first-child {
+  margin-top: 0;
+}
+
+.ktc-bienvenue > :last-child {
+  margin-bottom: 0;
+}
