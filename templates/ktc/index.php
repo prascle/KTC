@@ -167,6 +167,39 @@ $wa->addInlineScript('
  });
 ');
 
+// KTC : sommaire automatique des articles longs (arbitrage D21) — dès qu'un
+// article contient au moins 3 sous-titres (niveaux 2 à 4), un sommaire
+// cliquable est inséré en tête de texte. Les ancres suivent le défilement
+// fluide du CSS (section 6), sauf si la réduction d'animations est activée.
+$wa->addInlineScript('
+ document.addEventListener("DOMContentLoaded", function () {
+  var corps = document.querySelector(".com-content-article__body");
+  if (!corps) { return; }
+  var titres = corps.querySelectorAll("h2, h3, h4");
+  if (titres.length < 3) { return; }
+  var nav = document.createElement("nav");
+  nav.className = "ktc-sommaire";
+  nav.setAttribute("aria-label", "Sommaire");
+  var entete = document.createElement("p");
+  entete.className = "ktc-sommaire-titre";
+  entete.textContent = "Sommaire";
+  nav.appendChild(entete);
+  var liste = document.createElement("ul");
+  Array.prototype.forEach.call(titres, function (titre, i) {
+    if (!titre.id) { titre.id = "ktc-s-" + (i + 1); }
+    var item = document.createElement("li");
+    item.className = "ktc-niveau-" + titre.tagName.toLowerCase();
+    var lien = document.createElement("a");
+    lien.href = "#" + titre.id;
+    lien.textContent = titre.textContent;
+    item.appendChild(lien);
+    liste.appendChild(item);
+  });
+  nav.appendChild(liste);
+  corps.insertBefore(nav, corps.firstChild);
+ });
+');
+
 // Override 'template.active' asset to set correct ltr/rtl dependency
 $wa->registerStyle('template.active', '', [], [], ['template.cassiopeia.' . ($this->direction === 'rtl' ? 'rtl' : 'ltr')]);
 
