@@ -314,7 +314,7 @@ $wa->addInlineScript('
       }
     }
   } catch (e) {}
- });
+ })();
 ');
 
 // KTC : barre basse mobile « type app » (arbitrage BB du laboratoire,
