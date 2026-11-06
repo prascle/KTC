@@ -21,8 +21,6 @@
  *      depuis le menu réel (aucune adresse en dur).
  * À chaque mise à jour du cœur Joomla (via PR, décision D16), vérifier si
  * templates/cassiopeia/index.php évolue et reporter les changements ici.
- * À chaque mise à jour du cœur Joomla (via PR, décision D16), vérifier si
- * templates/cassiopeia/index.php évolue et reporter les changements ici.
  */
 
 defined('_JEXEC') or die;
