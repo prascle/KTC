@@ -129,7 +129,8 @@ $wa->addInlineScript('
 ');
 
 // KTC : carrousel de l'accueil (arbitrage D21) — le script crée les points
-// de navigation, branche les flèches et suit le défilement de la piste.
+// de navigation, branche les flèches (en butée, le carrousel tourne en
+// boucle — retour du peaufinage du 07/11) et suit le défilement de la piste.
 // Sans JavaScript, la piste reste défilable au doigt ou à la molette
 // (scroll natif) ; le défilement animé respecte prefers-reduced-motion.
 $wa->addInlineScript('
@@ -165,8 +166,16 @@ $wa->addInlineScript('
     }
     var precedente = carrousel.querySelector(".ktc-carrousel-fleche.ktc-precedente");
     var suivante = carrousel.querySelector(".ktc-carrousel-fleche.ktc-suivante");
-    if (precedente) { precedente.addEventListener("click", function () { defile(-piste.clientWidth); }); }
-    if (suivante) { suivante.addEventListener("click", function () { defile(piste.clientWidth); }); }
+    var fleche = function (versLaFin) {
+      var butee = piste.scrollWidth - piste.clientWidth;
+      if (versLaFin ? piste.scrollLeft >= butee - 4 : piste.scrollLeft <= 4) {
+        piste.scrollTo({ left: versLaFin ? 0 : piste.scrollWidth, behavior: fluide ? "smooth" : "auto" });
+      } else {
+        defile(versLaFin ? piste.clientWidth : -piste.clientWidth);
+      }
+    };
+    if (precedente) { precedente.addEventListener("click", function () { fleche(false); }); }
+    if (suivante) { suivante.addEventListener("click", function () { fleche(true); }); }
   });
  });
 ');
