@@ -496,12 +496,15 @@
    blanche : image d'introduction au format 16/9, titre et texte dessous.
    L'image d'une carte se choisit dans l'article, onglet « Images et
    liens → Image d'introduction ». Tout repose sur les classes standards
-   de com_content (.blog-item, .item-image, .item-content) ; la troncature
-   du texte passe par l'override html/com_content/category/blog_item.php
-   (texte encapsulé dans .ktc-intro).
+   de com_content (.blog-item, .item-image, .item-content) ; la page
+   vedette de l'accueil porte .blog-featured (le noyau 6.2.0 ne produit
+   pas de classe com-content-featured-blog — constat du 07/11) ; la
+   troncature du texte passe par les overrides html/com_content/category/
+   blog_item.php et html/com_content/featured/default_item.php (texte
+   encapsulé dans .ktc-intro).
    -------------------------------------------------------------------------- */
 .com-content-category-blog .blog-item,
-.com-content-featured-blog .blog-item {
+.blog-featured .blog-item {
   background-color: #fff;
   border: 1px solid #d5dcee;
   border-radius: .75rem;
@@ -511,40 +514,40 @@
 }
 
 .com-content-category-blog .blog-item:hover,
-.com-content-featured-blog .blog-item:hover {
+.blog-featured .blog-item:hover {
   box-shadow: 0 .5rem 1.25rem rgba(51, 71, 124, .18);
 }
 
 /* En colonnes (masonry), une carte ne doit jamais être coupée en deux */
 .com-content-category-blog .blog-item,
-.com-content-featured-blog .blog-item {
+.blog-featured .blog-item {
   break-inside: avoid;
 }
 
 .com-content-category-blog .blog-item .item-image,
-.com-content-featured-blog .blog-item .item-image {
+.blog-featured .blog-item .item-image {
   margin: 0;
 }
 
 .com-content-category-blog .blog-item .item-image img,
-.com-content-featured-blog .blog-item .item-image img {
+.blog-featured .blog-item .item-image img {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
 }
 
 .com-content-category-blog .blog-item .item-content,
-.com-content-featured-blog .blog-item .item-content {
+.blog-featured .blog-item .item-content {
   padding: 1rem 1.25rem 1.25rem;
 }
 
 .com-content-category-blog .blog-item .item-content > :first-child,
-.com-content-featured-blog .blog-item .item-content > :first-child {
+.blog-featured .blog-item .item-content > :first-child {
   margin-top: 0;
 }
 
 .com-content-category-blog .blog-item .item-content > :last-child,
-.com-content-featured-blog .blog-item .item-content > :last-child {
+.blog-featured .blog-item .item-content > :last-child {
   margin-bottom: 0;
 }
 
@@ -555,7 +558,7 @@
    encadrent ce texte dans .ktc-intro et cette règle le raccourcit
    automatiquement — les cartes restent succinctes quel que soit le rédacteur. */
 .com-content-category-blog .blog-item .item-content .ktc-intro,
-.com-content-featured-blog .blog-item .item-content .ktc-intro {
+.blog-featured .blog-item .item-content .ktc-intro {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -742,7 +745,7 @@ html[data-ktc-theme="sombre"] .container-header .mod-menu .mod-menu__sub > li > 
 
 /* Cartes des listes et fiche chantier */
 html[data-ktc-theme="sombre"] .com-content-category-blog .blog-item,
-html[data-ktc-theme="sombre"] .com-content-featured-blog .blog-item,
+html[data-ktc-theme="sombre"] .blog-featured .blog-item,
 html[data-ktc-theme="sombre"] .ktc-fiche-chantier {
   background-color: #1f2740;
   border-color: #343e5a;
