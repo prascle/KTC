@@ -987,3 +987,14 @@ html.ktc-taille-grande {
     order: 4;
   }
 }
+
+/* --------------------------------------------------------------------------
+   14. Invités (retour du 08/11) — bandeau, menus et barre basse réservés
+   aux connectés (voir index.php, écart 7 : l'en-tête entier est sauté pour
+   les visiteurs non connectés). La classe ktc-invite est posée sur <body>
+   pour ces visiteurs : elle annule la marge basse que la section 13 réserve
+   à la barre BB sur smartphone (pas de barre, pas de marge).
+   -------------------------------------------------------------------------- */
+body.ktc-invite {
+  padding-bottom: 0;
+}
