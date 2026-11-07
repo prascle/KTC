@@ -10,7 +10,7 @@
 
 /*
  * Template enfant « ktc » — dérivé de templates/cassiopeia/index.php (Joomla 6.2).
- * Six écarts seulement par rapport au parent :
+ * Sept écarts seulement par rapport au parent :
  *   1. chargement de la feuille de style enfant (palette P3, composants KTC) ;
  *   2. barre de navigation permanente (sticky) forcée ;
  *   3. menu mobile « burger » avec panneau à grandes entrées (arbitrage M1) ;
@@ -18,7 +18,10 @@
  *   5. bouton et panneau « Confort » de l'en-tête (arbitrage D24 : mode
  *      auto/clair/sombre + taille du texte) et entrée « Réglages » du burger ;
  *   6. barre basse mobile « type app » (arbitrage BB) construite par script
- *      depuis le menu réel (aucune adresse en dur).
+ *      depuis le menu réel (aucune adresse en dur) ;
+ *   7. interface des invités épurée (retour du 08/11) : en-tête complet
+ *      (bandeau, menu, burger, panneau Confort) et retour en haut réservés
+ *      aux connectés, classe ktc-invite sur <body> pour les visiteurs.
  * À chaque mise à jour du cœur Joomla (via PR, décision D16), vérifier si
  * templates/cassiopeia/index.php évolue et reporter les changements ici.
  */
@@ -50,6 +53,17 @@ $itemid   = $input->getCmd('Itemid', '');
 $sitename = htmlspecialchars($app->get('sitename'), ENT_QUOTES, 'UTF-8');
 $menu     = $app->getMenu()->getActive();
 $pageclass = $menu !== null ? $menu->getParams()->get('pageclass_sfx', '') : '';
+
+// KTC : visiteur non connecté (retour du 08/11) — le bandeau d'en-tête
+// (logo, description, menu, burger, panneau Confort), le bouton « retour
+// en haut » et la barre basse mobile sont réservés aux connectés ; un
+// visiteur ne voit que le bloc « Espace privé » de l'accueil et le
+// formulaire de connexion. Les scripts inline restent chargés : tous
+// testent la présence des éléments (arrêt silencieux si absent), et celui
+// du Confort continue d'appliquer le mode sombre et la taille de texte
+// mémorisés, même sans panneau.
+$utilisateurKtc = $app->getIdentity();
+$estInvite      = $utilisateurKtc === null || (int) $utilisateurKtc->id === 0;
 
 // Color Theme
 $paramsColorName = $this->params->get('colorName', 'colors_standard');
@@ -438,8 +452,10 @@ $wa->getAsset('style', 'fontawesome')->setAttribute('rel', 'lazy-stylesheet');
     . ($itemid ? ' itemid-' . $itemid : '')
     . ($pageclass ? ' ' . $pageclass : '')
     . $hasClass
+    . ($estInvite ? ' ktc-invite' : '')
     . ($this->direction == 'rtl' ? ' rtl' : '');
 ?>">
+    <?php if (!$estInvite) : ?>
     <header class="header container-header full-width<?php echo $stickyHeader ? ' ' . $stickyHeader : ''; ?>">
 
         <?php if ($this->countModules('topbar')) : ?>
@@ -502,6 +518,7 @@ $wa->getAsset('style', 'fontawesome')->setAttribute('rel', 'lazy-stylesheet');
             </div>
         <?php endif; ?>
     </header>
+    <?php endif; ?>
 
     <div class="site-grid">
         <?php if ($this->countModules('banner', true)) : ?>
@@ -565,7 +582,7 @@ $wa->getAsset('style', 'fontawesome')->setAttribute('rel', 'lazy-stylesheet');
         </footer>
     <?php endif; ?>
 
-    <?php if ($this->params->get('backTop') == 1) : ?>
+    <?php if (!$estInvite && $this->params->get('backTop') == 1) : ?>
         <a href="#top" id="back-top" class="back-to-top-link" aria-label="<?php echo Text::_('TPL_CASSIOPEIA_BACKTOTOP'); ?>">
             <span class="icon-arrow-up icon-fw" aria-hidden="true"></span>
         </a>
