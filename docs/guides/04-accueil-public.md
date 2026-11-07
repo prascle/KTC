@@ -84,3 +84,46 @@ le libellé) ; si cela gêne, un petit correctif CSS la changera en clé.
 
 En cas de souci : noter la page et l'appareil, et en faire part dans la
 conversation — correctif par pull request, comme d'habitude.
+
+## 5. Compléments après les premiers retours (08/11/2026)
+
+### 5.1 Après déconnexion, revenir à l'accueil
+
+Retour de test : après une déconnexion, on atterrissait sur la page
+Connexion. Le lien de menu « Déconnexion » possède une option native de
+redirection :
+
+Menus → Menu principal → élément **Déconnexion** (Utilisateurs →
+Déconnexion) :
+
+- onglet **Paramètres** → champ **Redirection après déconnexion** :
+  choisir l'élément **Accueil** ;
+- Enregistrer.
+
+Le champ contient probablement « Connexion » aujourd'hui, ce qui explique
+le comportement constaté. Vérifier : se déconnecter → retour sur l'accueil
+public (message + bouton Connexion), et non sur la page de connexion.
+
+### 5.2 Bandeau et menus réservés aux connectés
+
+Deuxième retour : réserver le bandeau (logo + description), le menu, le
+burger mobile et la barre basse des smartphones aux utilisateurs
+connectés. Un visiteur ne voit désormais que le bloc « Espace privé » (à
+l'accueil) et le formulaire de connexion.
+
+Rien à faire dans l'administration : le bandeau est rendu par le template
+et non par un module, le champ Accès d'un module ne peut donc pas le
+masquer. Le réglage est livré par le template lui-même (pull request,
+convention D16) et fonctionne dès que les sections 1 et 3 ci-dessus sont
+en place. Vérifier en navigation privée :
+
+- à l'accueil : ni bandeau, ni menu, ni burger — le bloc « Espace privé »
+  et le pied de page seulement ;
+- sur la page Connexion : le formulaire, sans le bandeau ;
+- sur smartphone : pas de barre basse ;
+- connecté : rien ne change (bandeau, menus, barre basse, panneau
+  Confort, retour en haut).
+
+Remarque : le fil d'Ariane et le pied de page restent visibles des
+visiteurs ; le mode sombre et la taille de texte mémorisés par un
+visiteur restent appliqués sur ces pages.
