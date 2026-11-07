@@ -715,6 +715,9 @@ html[data-ktc-theme="sombre"] {
   --bs-body-bg: #141927;
   --bs-body-color: #e6e9f2;
   --bs-border-color: #343e5a;
+  /* .text-muted (bloc de détails des articles : auteur, dates, clics…)
+     garde sinon le gris sombre de jour, peu lisible la nuit. */
+  --secondary-color: #a3aec0;
   --cassiopeia-color-primary: #46609c;
   --cassiopeia-color-hover: #33477c;
 }
