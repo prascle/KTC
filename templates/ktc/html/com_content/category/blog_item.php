@@ -13,10 +13,14 @@ defined('_JEXEC') or die;
 /*
  * KTC — override de la carte d'article des listes « Blog d'une catégorie »
  * (copie de la vue du noyau Joomla 6.2.0, components/com_content/tmpl/
- * category/blog_item.php). UN SEUL écart : le texte d'intro est encadré dans
- * un div .ktc-intro pour que le CSS (template.css, section 10) puisse le
- * tronquer à quelques lignées — les cartes restent succinctes même si
- * l'article n'a pas de coupure « Lire la suite ».
+ * category/blog_item.php). DEUX écarts :
+ * - le texte d'intro est encadré dans un div .ktc-intro pour que le CSS
+ *   (template.css, section 10) puisse le tronquer à quelques lignes — les
+ *   cartes restent succinctes même si l'article n'a pas de coupure
+ *   « Lire la suite » ;
+ * - le bloc de détails (auteur, dates, catégorie, clics — layout
+ *   joomla.content.info_block) est retiré : ces détails ne s'affichent plus
+ *   que dans l'article complet (peaufinage post-M02 du 06/11).
  * À chaque mise à jour du cœur (via PR, décision D16), vérifier si la vue
  * d'origine évolue et reporter les changements ici.
  */
@@ -34,9 +38,6 @@ use Joomla\Component\Content\Site\Helper\RouteHelper;
 $params = $this->item->params;
 $canEdit = $this->item->params->get('access-edit');
 $info    = $params->get('info_block_position', 0);
-
-// Check if associations are implemented. If they are, define the parameter.
-$assocParam = (Associations::isEnabled() && $params->get('show_associations'));
 
 $currentDate   = Factory::getDate()->format('Y-m-d H:i:s');
 $isUnpublished = ($this->item->state == ContentComponent::CONDITION_UNPUBLISHED || $this->item->publish_up > $currentDate)
@@ -57,13 +58,6 @@ $isUnpublished = ($this->item->state == ContentComponent::CONDITION_UNPUBLISHED 
         <?php echo LayoutHelper::render('joomla.content.icons', ['params' => $params, 'item' => $this->item]); ?>
     <?php endif; ?>
 
-    <?php // @todo Not that elegant would be nice to group the params ?>
-    <?php $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_date') || $params->get('show_create_date')
-        || $params->get('show_hits') || $params->get('show_category') || $params->get('show_parent_category') || $params->get('show_author') || $assocParam); ?>
-
-    <?php if ($useDefList && ($info == 0 || $info == 2)) : ?>
-        <?php echo LayoutHelper::render('joomla.content.info_block', ['item' => $this->item, 'params' => $params, 'position' => 'above']); ?>
-    <?php endif; ?>
     <?php if ($info == 0 && $params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>
         <?php echo LayoutHelper::render('joomla.content.tags', $this->item->tags->itemTags); ?>
     <?php endif; ?>
@@ -83,9 +77,6 @@ $isUnpublished = ($this->item->state == ContentComponent::CONDITION_UNPUBLISHED 
 
 
     <?php if ($info == 1 || $info == 2) : ?>
-        <?php if ($useDefList) : ?>
-            <?php echo LayoutHelper::render('joomla.content.info_block', ['item' => $this->item, 'params' => $params, 'position' => 'below']); ?>
-        <?php endif; ?>
         <?php if ($params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>
             <?php echo LayoutHelper::render('joomla.content.tags', $this->item->tags->itemTags); ?>
         <?php endif; ?>

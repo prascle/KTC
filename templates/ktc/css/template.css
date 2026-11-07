@@ -550,10 +550,12 @@
 
 /* Texte de la carte tronqué à 3 lignes (retour du test du 06/11) :
    sans coupure « Lire la suite » dans l'article, le texte d'intro affiché
-   dans les listes est le texte entier. L'override html/com_content/category/
-   blog_item.php encadre ce texte dans .ktc-intro et cette règle le raccourcit
+   dans les listes est le texte entier. Les overrides html/com_content/
+   category/blog_item.php et html/com_content/featured/default_item.php
+   encadrent ce texte dans .ktc-intro et cette règle le raccourcit
    automatiquement — les cartes restent succinctes quel que soit le rédacteur. */
-.com-content-category-blog .blog-item .item-content .ktc-intro {
+.com-content-category-blog .blog-item .item-content .ktc-intro,
+.com-content-featured-blog .blog-item .item-content .ktc-intro {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
